@@ -2,7 +2,6 @@ import os
 from datetime import datetime
 from openpyxl import Workbook
 
-
 def generate_instructor_feedback_workbook(info):
     """
     This function takes in the result of get_ta_feedback() with anonymous set to true and generates an Excel
@@ -22,7 +21,15 @@ def generate_instructor_feedback_workbook(info):
     # Save the workbook with today's date in the title
     today_date = datetime.today().strftime('%Y-%m-%d')
     file_name = f'TA Feedback {today_date}.xlsx'
-    wb.save(file_name)
+    directory = "excel_files"
+
+    # Create the directory if it doesn't exist
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
+    # Save the file in the specified directory
+    file_path = os.path.join(directory, file_name)
+    wb.save(file_path)
 
     print("Sheet created")
 
