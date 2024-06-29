@@ -89,7 +89,12 @@ def get_students_in_need(file_path):
     return flagged_student_instances
 
 
-result = get_students_in_need(FILE_PATH)
+def get_student_feedback(file_path, student_name="", student_email=""):
+    student_feedback = []
+    with (open(file_path, mode='r', encoding='utf-8') as file):
+        reader = csv.reader(file, delimiter=',', quotechar='"')
+        next(reader)
 
-for each in result:
-    print(each)
+        for row in reader:
+            print(row)
+    return student_feedback
