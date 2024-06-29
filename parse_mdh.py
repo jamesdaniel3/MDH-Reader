@@ -43,12 +43,12 @@ def main():
     if args.command == "get_student_oh_visits":
         result = get_student_oh_visits(INTERACTION_DATA, args.student_name, args.student_email, args.semesters)
         for each in result:
-            print(each, result[each])
+            print(each)
 
     elif args.command == "get_students_in_need":
         result = get_students_in_need(INTERACTION_DATA, args.semesters)
         for each in result:
-            print(each, result[each])
+            print(each)
 
     elif args.command == "get_student_feedback":
         result = get_student_feedback(INTERACTION_DATA, args.student_name, args.student_email, args.semesters)
