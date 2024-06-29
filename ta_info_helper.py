@@ -1,7 +1,7 @@
 from constants import interactions_data_constants as interaction_data, shifts_data_constants as shift_data
 from constants import ta_roster
 from sheets_helper import generate_instructor_feedback_sheet
-from utility_functions import get_student_written_feedback, convert_datetime_string
+from utility_functions import get_student_written_feedback, convert_datetime_string, cleaned_feedback
 import csv
 
 
@@ -59,19 +59,20 @@ def get_instructor_feedback(file_path, ta_names=None, named=False, google_sheet=
             if current_ta_name in ta_names:
                 if row[interaction_data.student_left_feedback] == "TRUE":
                     feedback = get_student_written_feedback(row)
-                    if feedback == "" or feedback is None:
+                    # insert cleaned feedback
+                    if not cleaned_feedback(feedback):
                         continue
                     if not named:
-                        results[current_ta_name] = results.get(current_ta_name, []) + [feedback]
+                        results[current_ta_name] = results.get(current_ta_name, []) + [cleaned_feedback(feedback)]
                     else:
                         # I feel like there has to be a more efficient way of handling this conditional structure
                         if current_ta_name in results:
                             if current_student_name in results[current_ta_name]:
-                                results[current_ta_name][current_student_name] += [feedback]
+                                results[current_ta_name][current_student_name] += [cleaned_feedback(feedback)]
                             else:
-                                results[current_ta_name][current_student_name] = [feedback]
+                                results[current_ta_name][current_student_name] = [cleaned_feedback(feedback)]
                         else:
-                            results[current_ta_name] = {current_student_name: [feedback]}
+                            results[current_ta_name] = {current_student_name: [cleaned_feedback(feedback)]}
 
     if google_sheet:
         generate_instructor_feedback_sheet(results)

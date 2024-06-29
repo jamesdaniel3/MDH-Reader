@@ -25,3 +25,15 @@ def convert_datetime_string(iso_string):
     date = est_time.strftime('%Y-%m-%d')  
     time = est_time.strftime('%I:%M %p')  
     return date, time
+
+
+def cleaned_feedback(feedback):
+    if not feedback:
+        return False
+
+    cleaned = feedback.lower().strip()
+    bad_feedback = ["none", "n/a", "no comments"]
+
+    if cleaned in bad_feedback:
+        return False
+    return cleaned
