@@ -1,15 +1,15 @@
 from constants import interactions_data_constants as interaction_data
-from utility_functions import get_student_written_feedback, get_ta_written_feedback, convert_datetime_string
+from utility_functions import get_student_written_feedback, get_ta_written_feedback, convert_datetime_string, detect_encoding
 import csv
 import json
 
 
-def get_student_oh_visits(file_path, student_name="empty", student_email="empty"):
+def get_student_oh_visits(file_paths, student_name="empty", student_email="empty"):
     """
     This function will give information about all of a student's visits to office hours.
 
     params:
-        file_path: the path to the data file, should be interaction data
+        file_paths: the paths to the data files, should be interaction data
         student_name: the student's first and last name, case-insensitive
         student_email: the student's email
 
@@ -18,31 +18,33 @@ def get_student_oh_visits(file_path, student_name="empty", student_email="empty"
 
     student_first_name, student_last_name = student_name.lower().split()
 
-    student_visits_info = [] 
-    with (open(file_path, mode='r', encoding='utf-8') as file):
-        reader = csv.reader(file, delimiter=',', quotechar='"')
-        next(reader)
-        
-        for row in reader:
-            if student_email == row[interaction_data.student_email] \
-                or student_first_name == row[interaction_data.student_first_name].lower() \
-                    and student_last_name == row[interaction_data.student_last_name].lower():
+    student_visits_info = []
+    for file_path in file_paths:
+        encoding = detect_encoding(file_path)
+        with (open(file_path, mode='r', encoding=encoding) as file):
+            reader = csv.reader(file, delimiter=',', quotechar='"')
+            next(reader)
 
-                student_prompts_results = json.loads(row[interaction_data.student_prompts])
-                reason_for_request = "Not given" if len(student_prompts_results) < 2 else student_prompts_results[1]["answer"]
-                student_written_feedback = get_student_written_feedback(row) if get_student_written_feedback(row) else "None"
-                ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
+            for row in reader:
+                if student_email == row[interaction_data.student_email] \
+                    or student_first_name == row[interaction_data.student_first_name].lower() \
+                        and student_last_name == row[interaction_data.student_last_name].lower():
 
-                info = {
-                    "interaction_id": row[interaction_data.ticket_id],
-                    "ta_name": row[interaction_data.teacher_first_name] + " " + row[interaction_data.teacher_last_name],
-                    "date": convert_datetime_string(row[interaction_data.started_at])[0],
-                    "time_requested": convert_datetime_string(row[interaction_data.started_at])[1],
-                    "reason_for_request": reason_for_request,
-                    "student_written_feedback": student_written_feedback,
-                    "ta_written_feedback":  ta_written_feedback,
-                }
-                student_visits_info.append(info)
+                    student_prompts_results = json.loads(row[interaction_data.student_prompts])
+                    reason_for_request = "Not given" if len(student_prompts_results) < 2 else student_prompts_results[1]["answer"]
+                    student_written_feedback = get_student_written_feedback(row) if get_student_written_feedback(row) else "None"
+                    ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
+
+                    info = {
+                        "interaction_id": row[interaction_data.ticket_id],
+                        "ta_name": row[interaction_data.teacher_first_name] + " " + row[interaction_data.teacher_last_name],
+                        "date": convert_datetime_string(row[interaction_data.started_at])[0],
+                        "time_requested": convert_datetime_string(row[interaction_data.started_at])[1],
+                        "reason_for_request": reason_for_request,
+                        "student_written_feedback": student_written_feedback,
+                        "ta_written_feedback":  ta_written_feedback,
+                    }
+                    student_visits_info.append(info)
 
     return student_visits_info
 

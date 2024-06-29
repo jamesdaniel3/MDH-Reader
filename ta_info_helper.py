@@ -2,14 +2,9 @@ from constants import interactions_data_constants as interaction_data, shifts_da
 from constants import ta_roster
 from sheets_helper import generate_instructor_feedback_sheet
 from execl_helper import generate_instructor_feedback_workbook
-from utility_functions import get_student_written_feedback, convert_datetime_string, cleaned_feedback
+from utility_functions import get_student_written_feedback, convert_datetime_string, cleaned_feedback, detect_encoding
 import csv
-import chardet
 
-def detect_encoding(file_path):
-    with open(file_path, 'rb') as f:
-        result = chardet.detect(f.read())
-        return result['encoding']
 
 def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False):
     """
@@ -95,7 +90,6 @@ def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet
         return
 
     return results
-
 
 
 def get_ta_shifts(file_path, ta_name, limit=None):
