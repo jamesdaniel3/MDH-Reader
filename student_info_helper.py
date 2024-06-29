@@ -34,7 +34,6 @@ def get_student_oh_visits(file_path, student_name="", student_email=""):
                 student_written_feedback = get_student_written_feedback(row) if get_student_written_feedback(row) else "None"
                 ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
 
-                print(row[data.teacher_feedback])
                 info = {
                     "interaction_id": row[data.ticket_id],
                     "ta_name" : row[data.teacher_first_name] + " " + row[data.teacher_last_name], 
@@ -44,7 +43,6 @@ def get_student_oh_visits(file_path, student_name="", student_email=""):
                     "student_written_feedback": student_written_feedback,
                     "ta_written_feedback":  ta_written_feedback,
                 }
-                print("")
                 student_visits_info.append(info)
 
     return student_visits_info
