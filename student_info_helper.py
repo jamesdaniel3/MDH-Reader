@@ -5,15 +5,20 @@ import json
 
 FILE_PATH = './mdh_files/S24_interaction_data.csv'  
 
+
 def get_student_oh_visits(file_path, student_name="", student_email=""):
-    if student_name: student_first_name, student_last_name = student_name.lower().split()
+
+    student_first_name, student_last_name = student_name.lower().split()
 
     student_visits_info = [] 
-    with open(file_path, mode='r', encoding='utf-8') as file:
+    with (open(file_path, mode='r', encoding='utf-8') as file):
         reader = csv.reader(file, delimiter=',', quotechar='"')
         
         for row in reader:
-            if student_first_name == row[data.student_first_name].lower() and student_last_name == row[data.student_last_name].lower():
+            if student_email == row[data.student_email] \
+                or student_first_name == row[data.student_first_name].lower() \
+                    and student_last_name == row[data.student_last_name].lower():
+
                 student_prompts_results = json.loads(row[data.student_prompts])
                 reason_for_request = "Not given" if len(student_prompts_results) < 2 else student_prompts_results[1]["answer"]
                 student_written_feedback = get_student_written_feedback(row) if get_student_written_feedback(row) else "None"
