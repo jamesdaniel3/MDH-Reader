@@ -2,16 +2,16 @@ from constants import interactions_data_constants as interaction_data, shifts_da
 from constants import ta_roster
 from sheets_helper import generate_instructor_feedback_sheet
 from execl_helper import generate_instructor_feedback_workbook
-from utility_functions import get_student_written_feedback, convert_datetime_string, cleaned_feedback
+from utility_functions import get_student_written_feedback, convert_datetime_string, cleaned_feedback, detect_encoding
 import csv
 
 
-def get_instructor_feedback(file_path, ta_names=None, named=False, google_sheet=False, excel_workbook=False):
+def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False):
     """
     This function will get all written feedback that each TA in ta_names has received.
 
     params:
-        file_path: the path to the data file, should be interaction data
+        file_paths: the list of paths to the data files, should be interaction data
         ta_name: a list of tas' first and last names, case-insensitive
         named: determines whether a student's name is tied to their feedback
 
@@ -54,30 +54,32 @@ def get_instructor_feedback(file_path, ta_names=None, named=False, google_sheet=
     for x in range(len(ta_names)):
         ta_names[x] = ta_names[x].lower()
 
-    with open(file_path, mode='r', encoding='utf-8') as file:
-        reader = csv.reader(file, delimiter=',', quotechar='"')
-        next(reader)
+    for file_path in file_paths:
+        encoding = detect_encoding(file_path)
+        with open(file_path, mode='r', encoding=encoding) as file:
+            reader = csv.reader(file, delimiter=',', quotechar='"')
 
-        for row in reader:
-            current_student_name = row[interaction_data.student_first_name] + " " + row[interaction_data.student_last_name]
-            current_ta_name = row[interaction_data.teacher_first_name].lower() + " " + row[interaction_data.teacher_last_name].lower()
-            if current_ta_name in ta_names:
-                if row[interaction_data.student_left_feedback] == "TRUE":
-                    feedback = get_student_written_feedback(row)
-                    # insert cleaned feedback
-                    if not cleaned_feedback(feedback):
-                        continue
-                    if not named:
-                        results[current_ta_name] = results.get(current_ta_name, []) + [cleaned_feedback(feedback)]
-                    else:
-                        # I feel like there has to be a more efficient way of handling this conditional structure
-                        if current_ta_name in results:
-                            if current_student_name in results[current_ta_name]:
-                                results[current_ta_name][current_student_name] += [cleaned_feedback(feedback)]
-                            else:
-                                results[current_ta_name][current_student_name] = [cleaned_feedback(feedback)]
+            for row in reader:
+                current_student_name = row[interaction_data.student_first_name] + " " + row[interaction_data.student_last_name]
+                current_ta_name = row[interaction_data.teacher_first_name].lower().strip() + " " + row[interaction_data.teacher_last_name].lower().strip()
+                if current_ta_name in ta_names:
+                    if row[interaction_data.student_left_feedback] == "TRUE":
+                        feedback = get_student_written_feedback(row)
+                        if feedback is None:
+                            continue
+                        if not cleaned_feedback(feedback):
+                            continue
+                        if not named:
+                            results[current_ta_name] = results.get(current_ta_name, []) + [cleaned_feedback(feedback)]
                         else:
-                            results[current_ta_name] = {current_student_name: [cleaned_feedback(feedback)]}
+                            # I feel like there has to be a more efficient way of handling this conditional structure
+                            if current_ta_name in results:
+                                if current_student_name in results[current_ta_name]:
+                                    results[current_ta_name][current_student_name] += [cleaned_feedback(feedback)]
+                                else:
+                                    results[current_ta_name][current_student_name] = [cleaned_feedback(feedback)]
+                            else:
+                                results[current_ta_name] = {current_student_name: [cleaned_feedback(feedback)]}
 
     if google_sheet:
         generate_instructor_feedback_sheet(results)
@@ -90,12 +92,12 @@ def get_instructor_feedback(file_path, ta_names=None, named=False, google_sheet=
     return results
 
 
-def get_ta_shifts(file_path, ta_name, limit=None):
+def get_ta_shifts(file_paths, ta_name, limit=None):
     """
     This function will return a list of a TA's shifts given their names
 
     params:
-        file_path: the path to the data file, should be shift data
+        file_paths: the list of paths to the data files, should be shift data
         ta_name: the ta's first and last name, case-insensitive
         limit: the number of shifts back you want to get info for
 
@@ -106,20 +108,22 @@ def get_ta_shifts(file_path, ta_name, limit=None):
     ta_name = ta_name.lower()
     count = 0
 
-    with open(file_path, mode='r', encoding='utf-8') as file:
-        reader = csv.reader(file, delimiter=',', quotechar='"')
-        next(reader)
+    for file_path in file_paths:
+        encoding = detect_encoding(file_path)
+        print(file_path)
+        with open(file_path, mode='r', encoding=encoding) as file:
+            reader = csv.reader(file, delimiter=',', quotechar='"')
+            next(reader)
 
-        for row in reader:
-            if row[shift_data.first_name].lower() + " " + row[shift_data.last_name].lower() == ta_name:
-                count += 1
-                info = {
-                    "date": convert_datetime_string(row[shift_data.start_at])[0],
-                    "start_time": convert_datetime_string(row[shift_data.start_at])[1],
-                    "end_time": convert_datetime_string(row[shift_data.end_at])[1],
-                }
-                shifts.append(info)
-                if limit is not None and count >= limit:
-                    return shifts
-
+            for row in reader:
+                if row[shift_data.first_name].lower().strip() + " " + row[shift_data.last_name].lower().strip() == ta_name:
+                    count += 1
+                    info = {
+                        "date": convert_datetime_string(row[shift_data.start_at])[0],
+                        "start_time": convert_datetime_string(row[shift_data.start_at])[1],
+                        "end_time": convert_datetime_string(row[shift_data.end_at])[1],
+                    }
+                    shifts.append(info)
+                    if limit is not None and count >= limit:
+                        return shifts
     return shifts
