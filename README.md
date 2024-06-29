@@ -23,6 +23,7 @@ If requirements.txt is not working correctly, run the following commands in your
 ```bash
   pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
   pip install pytz
+  pip install openpyxl
 ```
 
 ## TODO (order not representative)

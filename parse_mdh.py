@@ -3,6 +3,7 @@ from constants.files import INTERACTION_DATA, SHIFT_DATA
 from student_info_helper import get_student_oh_visits, get_students_in_need, get_student_feedback
 from ta_info_helper import get_instructor_feedback, get_ta_shifts
 
+
 def main():
     parser = argparse.ArgumentParser(description="MDH Data Parsing Tool")
     subparsers = parser.add_subparsers(dest="command")
@@ -25,6 +26,7 @@ def main():
     parser_instructor_feedback.add_argument("--ta_names", nargs='+', help="List of TA names")
     parser_instructor_feedback.add_argument("--named", action="store_true", help="Named feedback")
     parser_instructor_feedback.add_argument("--google_sheet", action="store_true", help="Generate Google Sheet")
+    parser_instructor_feedback.add_argument("--excel_workbook", action="store_true", help="Generate Excel Workbook")
 
     # Subparser for get_ta_shifts
     parser_ta_shifts = subparsers.add_parser("get_ta_shifts", help="Get TA shifts")
@@ -49,8 +51,8 @@ def main():
         print(result)
 
     elif args.command == "get_instructor_feedback":
-        result = get_instructor_feedback(interaction_data_file, args.ta_names, args.named, args.google_sheet)
-        if not args.google_sheet:
+        result = get_instructor_feedback(interaction_data_file, args.ta_names, args.named, args.google_sheet, args.excel_workbook)
+        if not args.google_sheet and not args.excel_workbook:
             print(result)
 
     elif args.command == "get_ta_shifts":
@@ -59,6 +61,7 @@ def main():
 
     else:
         parser.print_help()
+
 
 if __name__ == "__main__":
     main()

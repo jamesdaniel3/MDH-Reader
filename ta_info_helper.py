@@ -1,11 +1,12 @@
 from constants import interactions_data_constants as interaction_data, shifts_data_constants as shift_data
 from constants import ta_roster
 from sheets_helper import generate_instructor_feedback_sheet
+from execl_helper import generate_instructor_feedback_workbook
 from utility_functions import get_student_written_feedback, convert_datetime_string, cleaned_feedback
 import csv
 
 
-def get_instructor_feedback(file_path, ta_names=None, named=False, google_sheet=False):
+def get_instructor_feedback(file_path, ta_names=None, named=False, google_sheet=False, excel_workbook=False):
     """
     This function will get all written feedback that each TA in ta_names has received.
 
@@ -38,6 +39,10 @@ def get_instructor_feedback(file_path, ta_names=None, named=False, google_sheet=
 
     if named and google_sheet:
         print("Google sheets can only be generated for anonymous feedback")
+        quit(1)
+
+    if named and excel_workbook:
+        print("Excel workbooks can only be generated for anonymous feedback")
         quit(1)
 
     if ta_names is None:
@@ -76,6 +81,10 @@ def get_instructor_feedback(file_path, ta_names=None, named=False, google_sheet=
 
     if google_sheet:
         generate_instructor_feedback_sheet(results)
+        return
+
+    if excel_workbook:
+        generate_instructor_feedback_workbook(results)
         return
 
     return results
