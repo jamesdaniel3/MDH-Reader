@@ -3,7 +3,6 @@ from constants.files import INTERACTION_DATA, SHIFT_DATA
 from student_info_helper import get_student_oh_visits, get_students_in_need, get_student_feedback
 from ta_info_helper import get_instructor_feedback, get_ta_shifts
 
-
 def main():
     parser = argparse.ArgumentParser(description="MDH Data Parsing Tool")
     subparsers = parser.add_subparsers(dest="command")
@@ -23,7 +22,7 @@ def main():
 
     # Subparser for get_instructor_feedback
     parser_instructor_feedback = subparsers.add_parser("get_instructor_feedback", help="Get instructor feedback")
-    parser_instructor_feedback.add_argument("ta_names", nargs='+', help="List of TA names")
+    parser_instructor_feedback.add_argument("--ta_names", nargs='+', help="List of TA names")
     parser_instructor_feedback.add_argument("--named", action="store_true", help="Named feedback")
     parser_instructor_feedback.add_argument("--google_sheet", action="store_true", help="Generate Google Sheet")
 
@@ -60,7 +59,6 @@ def main():
 
     else:
         parser.print_help()
-
 
 if __name__ == "__main__":
     main()

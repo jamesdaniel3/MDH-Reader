@@ -1,10 +1,11 @@
 from constants import interactions_data_constants as interaction_data, shifts_data_constants as shift_data
+from constants import ta_roster
 from sheets_helper import generate_instructor_feedback_sheet
 from utility_functions import get_student_written_feedback, convert_datetime_string
 import csv
 
 
-def get_instructor_feedback(file_path, ta_names, named=False, google_sheet=False):
+def get_instructor_feedback(file_path, ta_names=None, named=False, google_sheet=False):
     """
     This function will get all written feedback that each TA in ta_names has received.
 
@@ -39,6 +40,9 @@ def get_instructor_feedback(file_path, ta_names, named=False, google_sheet=False
         print("Google sheets can only be generated for anonymous feedback")
         quit(1)
 
+    if ta_names is None:
+        ta_names = ta_roster.roster
+
     results = {}
 
     # inefficient but functional
@@ -50,10 +54,8 @@ def get_instructor_feedback(file_path, ta_names, named=False, google_sheet=False
         next(reader)
 
         for row in reader:
-            current_student_name = row[interaction_data.student_first_name] + " " + row[
-                interaction_data.student_last_name]
-            current_ta_name = row[interaction_data.teacher_first_name].lower() + " " + row[
-                interaction_data.teacher_last_name].lower()
+            current_student_name = row[interaction_data.student_first_name] + " " + row[interaction_data.student_last_name]
+            current_ta_name = row[interaction_data.teacher_first_name].lower() + " " + row[interaction_data.teacher_last_name].lower()
             if current_ta_name in ta_names:
                 if row[interaction_data.student_left_feedback] == "TRUE":
                     feedback = get_student_written_feedback(row)
