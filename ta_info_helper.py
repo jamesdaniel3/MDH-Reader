@@ -11,7 +11,7 @@ def get_instructor_feedback(file_path, ta_names, anonymous=True):
 
     params:
         file_path: the path to the data file, should be interaction data
-        ta_name: a list of tas' first and last names
+        ta_name: a list of tas' first and last names, case insensitive
         anonymous: determines whether a students name is tied to their feedback
 
     if anonymous:
@@ -38,13 +38,17 @@ def get_instructor_feedback(file_path, ta_names, anonymous=True):
 
     results = {}
 
+    # inefficient but functional
+    for x in range(len(ta_names)):
+        ta_names[x] = ta_names[x].lower()
+
     with open(file_path, mode='r', encoding='utf-8') as file:
         reader = csv.reader(file, delimiter=',', quotechar='"')
         next(reader)
         
         for row in reader:
             current_student_name = row[data.student_first_name] + " " + row[data.student_last_name]
-            current_ta_name = row[data.teacher_first_name] + " " + row[data.teacher_last_name]
+            current_ta_name = row[data.teacher_first_name].lower() + " " + row[data.teacher_last_name].lower()
             if current_ta_name in ta_names:
                 if row[data.student_left_feedback] == "TRUE":
                     feedback = get_student_written_feedback(row)
