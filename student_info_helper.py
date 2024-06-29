@@ -7,6 +7,16 @@ FILE_PATH = './mdh_files/S24_interaction_data.csv'
 
 
 def get_student_oh_visits(file_path, student_name="", student_email=""):
+    """
+    This function will give information about all of a student's visits to office hours.
+
+    params:
+        file_path: the path to the data file, should be interaction data
+        student_name: the student's first and last name, capitalization is irrelevant
+        student_email: the student's email
+
+    return: a list of dictionaries containing the information about the student's OH visits, see the info= {} section
+    """
 
     student_first_name, student_last_name = student_name.lower().split()
 

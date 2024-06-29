@@ -4,21 +4,23 @@ import csv
 
 FILE_PATH = './mdh_files/S24_interaction_data.csv'  
 
+
 def get_instructor_feedback(file_path, ta_name, anonymous=True):
     """
-    This function will get all written feedback that a given TA has receieved.
-    
+    This function will get all written feedback that a given TA has received.
+
     params:
         file_path: the path to the data file, should be interaction data
-        ta_name: the ta's first and last name, capitalization is irrelevant 
-        anoymous: determines whether or not a students name is tied to their feedback
-        return: a list of student feedback if anonymous is True, a dictionary of student names tied to their feedback if anonymous is False  
+        ta_name: the ta's first and last name, capitalization is irrelevant
+        anonymous: determines whether a students name is tied to their feedback
 
+    return: a list of student feedback if anonymous is True, a dictionary of student names tied to their feedback if anonymous is False
     """
 
     instructor_first_name, instructor_last_name = ta_name.lower().split()
     instructor_feedback_anonymous = []
     instructor_feedback_named = {}
+
     with open(file_path, mode='r', encoding='utf-8') as file:
         reader = csv.reader(file, delimiter=',', quotechar='"')
         
