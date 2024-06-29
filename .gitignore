@@ -2,3 +2,4 @@ mdh_files/*
 __pycache__
 credentials.json
 token.json
+constants/ta_roster.py
