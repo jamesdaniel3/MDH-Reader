@@ -35,23 +35,22 @@ def main():
 
     args = parser.parse_args()
 
-    interaction_data_file = INTERACTION_DATA[0]
     shift_data_file = SHIFT_DATA[0]
 
     if args.command == "get_student_oh_visits":
-        result = get_student_oh_visits(interaction_data_file, args.student_name, args.student_email)
+        result = get_student_oh_visits(INTERACTION_DATA, args.student_name, args.student_email)
         print(result)
 
     elif args.command == "get_students_in_need":
-        result = get_students_in_need(interaction_data_file)
+        result = get_students_in_need(INTERACTION_DATA)
         print(result)
 
     elif args.command == "get_student_feedback":
-        result = get_student_feedback(interaction_data_file, args.student_name, args.student_email)
+        result = get_student_feedback(INTERACTION_DATA, args.student_name, args.student_email)
         print(result)
 
     elif args.command == "get_instructor_feedback":
-        result = get_instructor_feedback(interaction_data_file, args.ta_names, args.named, args.google_sheet, args.excel_workbook)
+        result = get_instructor_feedback(INTERACTION_DATA, args.ta_names, args.named, args.google_sheet, args.excel_workbook)
         if not args.google_sheet and not args.excel_workbook:
             print(result)
 

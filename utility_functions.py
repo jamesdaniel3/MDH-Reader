@@ -6,10 +6,17 @@ import chardet
 
 
 def get_student_written_feedback(row):
-    student_responses = json.loads(row[data.student_feedback])
-    for response in student_responses:
-        if response["question"]["type"] == "free-response":
-            return response["answer"]
+    try:
+        student_responses = json.loads(row[data.student_feedback])
+        # this should just be done with the prompt field, it's safter
+        for response in student_responses:
+            if response["question"]["type"] == "free-response":
+                return response["answer"]
+            if response["question"]["type"] == "short-answer":
+                return response["answer"]
+    except json.JSONDecodeError as e:
+        print(f"JSONDecodeError: {e} - Skipping row")
+        return None
 
 
 def get_ta_written_feedback(row):
