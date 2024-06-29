@@ -93,6 +93,8 @@ def get_student_feedback(file_path, student_name="empty", student_email="empty")
     """
     This function give all the feedback a given student has received from TAs.
 
+    Note: this function is UNTESTED!
+
     params:
         file_path: the path to the data file, should be interaction data
         student_name: the student's first and last name, capitalization is irrelevant
