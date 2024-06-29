@@ -9,10 +9,19 @@ If you are TA looking to help with the codebase, see the notes directory, as wel
 ## CAPABILITIES
 
 - Given a list of TA names, get the feedback that they have received from students (get_instructor_feedback)
+- Output TA feedback into a Google sheet where each TA would have their own sheet with comments (generate_ta_feedback_sheet)
 - Given a student's name or email, get information about all of their trips to office hours (get_student_oh_visits)
 - Get all flagged students (get_students_in_need)
 - Get a given student's feedback (get_student_feedback)
 - Get a list of a TA's shifts (get_ta_shifts)
+
+## INSTALLS
+
+If requirements.txt is not working correctly, run the following commands in your working directory
+```bash
+  pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
+  pip install pytz
+```
 
 ## TODO (order not representative)
 
