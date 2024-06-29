@@ -5,35 +5,61 @@ import csv
 FILE_PATH = './mdh_files/S24_interaction_data.csv'  
 
 
-def get_instructor_feedback(file_path, ta_name, anonymous=True):
+def get_instructor_feedback(file_path, ta_names, anonymous=True):
     """
-    This function will get all written feedback that a given TA has received.
+    This function will get all written feedback that each TA in ta_names has received.
 
     params:
         file_path: the path to the data file, should be interaction data
-        ta_name: the ta's first and last name, capitalization is irrelevant
+        ta_name: a list of tas' first and last names
         anonymous: determines whether a students name is tied to their feedback
 
-    return: a list of student feedback if anonymous is True, a dictionary of student names tied to their feedback if anonymous is False
+    if anonymous:
+        return
+            {
+                <TA NAME>: [feedback1, feedback2, ...],
+                <TA NAME>: [feedback1, feedback2, ...],
+                ...
+            }
+    if not anonymous:
+        return
+            {
+                <TA NAME>:
+                    <STUDENT NAME>: [feedback1, feedback2, ...],
+                    <STUDENT NAME>: [feedback1, feedback2, ...],
+                    ...
+                <TA NAME>:
+                    <STUDENT NAME>: [feedback1, feedback2, ...],
+                    <STUDENT NAME>: [feedback1, feedback2, ...],
+                    ...
+                ...
+            }
     """
 
-    instructor_first_name, instructor_last_name = ta_name.lower().split()
-    instructor_feedback_anonymous = []
-    instructor_feedback_named = {}
+    results = {}
 
     with open(file_path, mode='r', encoding='utf-8') as file:
         reader = csv.reader(file, delimiter=',', quotechar='"')
         next(reader)
         
         for row in reader:
-            if row[data.teacher_first_name].lower() == instructor_first_name and row[data.teacher_last_name].lower() == instructor_last_name:
+            current_student_name = row[data.student_first_name] + " " + row[data.student_last_name]
+            current_ta_name = row[data.teacher_first_name] + " " + row[data.teacher_last_name]
+            if current_ta_name in ta_names:
                 if row[data.student_left_feedback] == "TRUE":
                     feedback = get_student_written_feedback(row)
                     if feedback == "" or feedback is None:
                         continue
                     if anonymous:
-                        instructor_feedback_anonymous.append(feedback)
+                        results[current_ta_name] = results.get(current_ta_name, []) + [feedback]
                     else:
-                        instructor_feedback_named[row[data.student_first_name] + " " + row[data.student_last_name]] = instructor_feedback_named.get(row[data.student_first_name] + " " + row[data.student_last_name], "") + feedback
+                        # I feel like there has to be a more efficient way of handling this conditional structure
+                        if current_ta_name in results:
+                            if current_student_name in results[current_ta_name]:
+                                results[current_ta_name][current_student_name] += [feedback]
+                            else:
+                                results[current_ta_name][current_student_name] = [feedback]
+                        else:
+                            results[current_ta_name] = {current_student_name: [feedback]}
 
-    return instructor_feedback_anonymous if anonymous else instructor_feedback_named
+    return results if anonymous else results

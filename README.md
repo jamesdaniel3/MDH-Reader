@@ -8,15 +8,14 @@ If you are TA looking to help with the codebase, see the notes directory, as wel
 
 ## CAPABILITIES
 
-- Given a TA's name, get the feedback that they have received from students (get_instructor_feedback)
+- Given a list of TA names, get the feedback that they have received from students (get_instructor_feedback)
 - Given a student's name or email, get information about all of their trips to office hours (get_student_oh_vists)
 - Allow for getting all flagged students (get_students_in_need)
 
 ## TODO (order not representative)
 
 - Create a UI, probably just running from terminal for now
-- Allow for getting a group of TAs feedback
-- Allow for getting all TAs feedback
+- Allow for getting all TAs feedback without having to list them all
 - Allow for getting a given student's feedback (any TA notes about the student)
 - Allow for output in xlsx and/or sheets
 - Allow for auto updating of the data files
