@@ -34,8 +34,6 @@ Alternatively:
 
 ## TODO (order not representative)
 
-- Create a UI, probably just running from terminal for now
 - Allow for auto updating of the data files
-- Allow for reading through multiple semesters of data
 - Allow for selecting which semesters of data you want to read through
 - Verify functionality of get_student_feedback
