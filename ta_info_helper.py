@@ -23,6 +23,7 @@ def get_instructor_feedback(file_path, ta_name, anonymous=True):
 
     with open(file_path, mode='r', encoding='utf-8') as file:
         reader = csv.reader(file, delimiter=',', quotechar='"')
+        next(reader)
         
         for row in reader:
             if row[data.teacher_first_name].lower() == instructor_first_name and row[data.teacher_last_name].lower() == instructor_last_name:
