@@ -1,12 +1,12 @@
 
-Interaction data is a CSV file, each line should have the following fields:
+Interaction data is a CSV file, each line should have the following fields, all of which are strings:
 
 ticket_id [0]
 status [1]
 student_prompts [2]
 is_followup [3]
 parent_id [4]
-requested_at [5]
+requested_at [5]  (date string)
 called_at [6]
 started_At [7]
 completed_at [8]
@@ -98,3 +98,41 @@ With Custom Feedback:
         }
     }
 ]
+
+
+Below is an example of student_prompts:
+
+'[
+    {
+        "answer":"Q1",
+        "isValid":false,
+        "question":{
+            "type":"short-answer",
+            "prompt":"Where are you sitting (tables have letters, chairs have numbers)?",
+            "options":[""],"isRequired":false,"hasAutocomplete":false,"allowCustomResponse":false
+        }
+    },
+    {
+        "answer":"PA09",
+        "isValid":true,
+        "question":{
+            "type":"short-answer",
+            "prompt":"What are you working on?",
+            "options":[],
+            "isRequired":false,
+            "hasAutocomplete":false,
+            "allowCustomResponse":false
+        }
+    },
+    {
+        "answer":"Yes",
+        "isValid":true,
+        "question":{
+            "type":"free-response",
+            "prompt":"What have you tried to solve the problem?",
+            "options":[],"isRequired":false,
+            "hasAutocomplete":false,
+            "allowCustomResponse":false
+        }
+    }   
+]'
