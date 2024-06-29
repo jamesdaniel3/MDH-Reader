@@ -92,12 +92,12 @@ def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet
     return results
 
 
-def get_ta_shifts(file_path, ta_name, limit=None):
+def get_ta_shifts(file_paths, ta_name, limit=None):
     """
     This function will return a list of a TA's shifts given their names
 
     params:
-        file_path: the path to the data file, should be shift data
+        file_paths: the list of paths to the data files, should be shift data
         ta_name: the ta's first and last name, case-insensitive
         limit: the number of shifts back you want to get info for
 
@@ -108,20 +108,22 @@ def get_ta_shifts(file_path, ta_name, limit=None):
     ta_name = ta_name.lower()
     count = 0
 
-    with open(file_path, mode='r', encoding='utf-8') as file:
-        reader = csv.reader(file, delimiter=',', quotechar='"')
-        next(reader)
+    for file_path in file_paths:
+        encoding = detect_encoding(file_path)
+        print(file_path)
+        with open(file_path, mode='r', encoding=encoding) as file:
+            reader = csv.reader(file, delimiter=',', quotechar='"')
+            next(reader)
 
-        for row in reader:
-            if row[shift_data.first_name].lower() + " " + row[shift_data.last_name].lower() == ta_name:
-                count += 1
-                info = {
-                    "date": convert_datetime_string(row[shift_data.start_at])[0],
-                    "start_time": convert_datetime_string(row[shift_data.start_at])[1],
-                    "end_time": convert_datetime_string(row[shift_data.end_at])[1],
-                }
-                shifts.append(info)
-                if limit is not None and count >= limit:
-                    return shifts
-
+            for row in reader:
+                if row[shift_data.first_name].lower().strip() + " " + row[shift_data.last_name].lower().strip() == ta_name:
+                    count += 1
+                    info = {
+                        "date": convert_datetime_string(row[shift_data.start_at])[0],
+                        "start_time": convert_datetime_string(row[shift_data.start_at])[1],
+                        "end_time": convert_datetime_string(row[shift_data.end_at])[1],
+                    }
+                    shifts.append(info)
+                    if limit is not None and count >= limit:
+                        return shifts
     return shifts

@@ -35,8 +35,6 @@ def main():
 
     args = parser.parse_args()
 
-    shift_data_file = SHIFT_DATA
-
     if args.command == "get_student_oh_visits":
         result = get_student_oh_visits(INTERACTION_DATA, args.student_name, args.student_email)
         print(result)
@@ -56,7 +54,8 @@ def main():
 
     elif args.command == "get_ta_shifts":
         result = get_ta_shifts(SHIFT_DATA, args.ta_name, args.limit)
-        print(result)
+        for each in result:
+            print(each)
 
     else:
         parser.print_help()

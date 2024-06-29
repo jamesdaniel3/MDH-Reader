@@ -6,7 +6,7 @@ If you are TA looking to use the script, reach out and I can point you to the da
 which means user emails are allowed manually. If you are unable to use the Google sheets functionality, reach out to me and I  can add you to our test users. I am trying to get the project 
 approved for "production" use.
 
-If you are TA looking to help with the codebase, see the notes directory, as well as any in-code documentation.
+If you are TA looking to help with the codebase, see the developer_notes directory, as well as any in-code documentation and reach out for files.
 
 ## CAPABILITIES
 

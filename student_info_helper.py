@@ -9,7 +9,7 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
     This function will give information about all of a student's visits to office hours.
 
     params:
-        file_paths: the paths to the data files, should be interaction data
+        file_paths:the list of paths to the data files, should be interaction data
         student_name: the student's first and last name, case-insensitive
         student_email: the student's email
 
@@ -59,7 +59,7 @@ def get_students_in_need(file_paths):
             it seems worth keeping as better safe than sorry, could probably be cleaned some
 
     params:
-        file_paths: the paths to the data files, should be interaction data
+        file_paths: the list of paths to the data files, should be interaction data
 
     return: a list of dictionaries containing the information about the students, see the info= {} section
     """
@@ -98,7 +98,7 @@ def get_student_feedback(file_paths, student_name="empty", student_email="empty"
     Note: this function is COMPLETELY UNTESTED!
 
     params:
-        file_paths: the paths to the data files, should be interaction data
+        file_paths: the list of paths to the data files, should be interaction data
         student_name: the student's first and last name, case-insensitive
         student_email: the student's email
 
