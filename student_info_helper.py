@@ -6,7 +6,7 @@ import json
 FILE_PATH = './mdh_files/S24_interaction_data.csv'  
 
 
-def get_student_oh_visits(file_path, student_name="", student_email=""):
+def get_student_oh_visits(file_path, student_name="empty", student_email="empty"):
     """
     This function will give information about all of a student's visits to office hours.
 
@@ -89,12 +89,33 @@ def get_students_in_need(file_path):
     return flagged_student_instances
 
 
-def get_student_feedback(file_path, student_name="", student_email=""):
-    student_feedback = []
+def get_student_feedback(file_path, student_name="empty", student_email="empty"):
+    """
+    This function give all the feedback a given student has received from TAs.
+
+    params:
+        file_path: the path to the data file, should be interaction data
+        student_name: the student's first and last name, capitalization is irrelevant
+        student_email: the student's email
+
+    return: a dictionary where keys are TA names and values are lists of the feedback they have given
+    """
+    student_feedback = {}
+    student_first_name, student_last_name = student_name.lower().split()
     with (open(file_path, mode='r', encoding='utf-8') as file):
         reader = csv.reader(file, delimiter=',', quotechar='"')
         next(reader)
 
         for row in reader:
-            print(row)
+            current_ta_name = row[data.teacher_first_name].lower() + " " + row[data.teacher_last_name].lower()
+            if student_email == row[data.student_email] \
+                    or student_first_name == row[data.student_first_name].lower() \
+                    and student_last_name == row[data.student_last_name].lower():
+                ta_responses = json.loads(row[data.teacher_feedback])
+
+                if len(ta_responses) == 0:
+                    continue
+                if "3" in ta_responses[0]["answer"]["selections"] or 4 in ta_responses[0]["answer"]["selections"]:
+                    ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
+                    student_feedback[current_ta_name] = student_feedback.get(current_ta_name, []) + [ta_written_feedback]
     return student_feedback
