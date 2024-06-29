@@ -6,7 +6,7 @@ from utility_functions import get_student_written_feedback, convert_datetime_str
 import csv
 
 
-def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False):
+def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False, semesters=None):
     """
     This function will get all written feedback that each TA in ta_names has received.
 
@@ -14,6 +14,7 @@ def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet
         file_paths: the list of paths to the data files, should be interaction data
         ta_name: a list of tas' first and last names, case-insensitive
         named: determines whether a student's name is tied to their feedback
+        semesters: the number of semesters back for which you want to collect data, uses all data by default
 
     if not named:
         return
@@ -48,13 +49,20 @@ def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet
     if ta_names is None:
         ta_names = ta_roster.roster
 
+    if semesters is None:
+        semesters = len(file_paths)
+
     results = {}
 
     # inefficient but functional
     for x in range(len(ta_names)):
         ta_names[x] = ta_names[x].lower()
 
-    for file_path in file_paths:
+    for x in range(len(file_paths)):
+        if x >= semesters:
+            break
+
+        file_path = file_paths[x]
         encoding = detect_encoding(file_path)
         with open(file_path, mode='r', encoding=encoding) as file:
             reader = csv.reader(file, delimiter=',', quotechar='"')
@@ -92,7 +100,7 @@ def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet
     return results
 
 
-def get_ta_shifts(file_paths, ta_name, limit=None):
+def get_ta_shifts(file_paths, ta_name, limit=None, semesters=None):
     """
     This function will return a list of a TA's shifts given their names
 
@@ -100,6 +108,7 @@ def get_ta_shifts(file_paths, ta_name, limit=None):
         file_paths: the list of paths to the data files, should be shift data
         ta_name: the ta's first and last name, case-insensitive
         limit: the number of shifts back you want to get info for
+        semesters: the number of semesters back for which you want to collect data, uses all data by default
 
     return: a list of dictionaries containing the information about a TA's shift activity
     """
@@ -108,9 +117,15 @@ def get_ta_shifts(file_paths, ta_name, limit=None):
     ta_name = ta_name.lower()
     count = 0
 
-    for file_path in file_paths:
+    if semesters is None:
+        semesters = len(file_paths)
+
+    for x in range(len(file_paths)):
+        if x >= semesters:
+            break
+
+        file_path = file_paths[x]
         encoding = detect_encoding(file_path)
-        print(file_path)
         with open(file_path, mode='r', encoding=encoding) as file:
             reader = csv.reader(file, delimiter=',', quotechar='"')
             next(reader)

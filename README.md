@@ -16,6 +16,7 @@ If you are TA looking to help with the codebase, see the developer_notes directo
 - Get all flagged students (get_students_in_need)
 - Get a given student's feedback (get_student_feedback)
 - Get a list of a TA's shifts (get_ta_shifts)
+- For all of the above actions, choose the number of semesters back for which you want data, defaults to using all data
 
 ## INSTALLS
 
@@ -35,5 +36,4 @@ Alternatively:
 ## TODO (order not representative)
 
 - Allow for auto updating of the data files
-- Allow for selecting which semesters of data you want to read through
 - Verify functionality of get_student_feedback

@@ -4,7 +4,7 @@ import csv
 import json
 
 
-def get_student_oh_visits(file_paths, student_name="empty", student_email="empty"):
+def get_student_oh_visits(file_paths, student_name="empty", student_email="empty", semesters=None):
     """
     This function will give information about all of a student's visits to office hours.
 
@@ -12,6 +12,7 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
         file_paths:the list of paths to the data files, should be interaction data
         student_name: the student's first and last name, case-insensitive
         student_email: the student's email
+        semesters: the number of semesters back for which you want to collect data, uses all data by default
 
     return: a list of dictionaries containing the information about the student's OH visits, see the info= {} section
     """
@@ -19,8 +20,16 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
     student_first_name, student_last_name = student_name.lower().split()
 
     student_visits_info = []
-    for file_path in file_paths:
+    if semesters is None:
+        semesters = len(file_paths)
+
+    for x in range(len(file_paths)):
+        if x >= semesters:
+            break
+
+        file_path = file_paths[x]
         encoding = detect_encoding(file_path)
+
         with (open(file_path, mode='r', encoding=encoding) as file):
             reader = csv.reader(file, delimiter=',', quotechar='"')
             next(reader)
@@ -49,7 +58,7 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
     return student_visits_info
 
 
-def get_students_in_need(file_paths):
+def get_students_in_need(file_paths, semesters=None):
     """
     This function will give information about all of a students who have had a TA answer one or both of the following:
         "an instructor should comment the student, comments below"
@@ -60,11 +69,20 @@ def get_students_in_need(file_paths):
 
     params:
         file_paths: the list of paths to the data files, should be interaction data
+        semesters: the number of semesters back for which you want to collect data, uses all data by default
 
     return: a list of dictionaries containing the information about the students, see the info= {} section
     """
     flagged_student_instances = []
-    for file_path in file_paths:
+
+    if semesters is None:
+        semesters = len(file_paths)
+
+    for x in range(len(file_paths)):
+        if x >= semesters:
+            break
+
+        file_path = file_paths[x]
         encoding = detect_encoding(file_path)
         with (open(file_path, mode='r', encoding=encoding) as file):
             reader = csv.reader(file, delimiter=',', quotechar='"')
@@ -91,7 +109,7 @@ def get_students_in_need(file_paths):
     return flagged_student_instances
 
 
-def get_student_feedback(file_paths, student_name="empty", student_email="empty"):
+def get_student_feedback(file_paths, student_name="empty", student_email="empty", semesters=None):
     """
     This function give all the feedback a given student has received from TAs.
 
@@ -101,13 +119,22 @@ def get_student_feedback(file_paths, student_name="empty", student_email="empty"
         file_paths: the list of paths to the data files, should be interaction data
         student_name: the student's first and last name, case-insensitive
         student_email: the student's email
+        semesters: the number of semesters back for which you want to collect data, uses all data by default
 
     return: a dictionary where keys are TA names and values are lists of the feedback they have given
     """
     student_feedback = {}
     student_first_name, student_last_name = student_name.lower().split()
-    for file_path in file_paths:
-        encoding = detect_encoding(file_paths)
+
+    if semesters is None:
+        semesters = len(file_paths)
+
+    for x in range(len(file_paths)):
+        if x >= semesters:
+            break
+
+        file_path = file_paths[x]
+        encoding = detect_encoding(file_path)
         with (open(file_path, mode='r', encoding=encoding) as file):
             reader = csv.reader(file, delimiter=',', quotechar='"')
             next(reader)
