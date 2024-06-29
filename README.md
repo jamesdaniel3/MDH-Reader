@@ -27,6 +27,11 @@ If requirements.txt is not working correctly, run the following commands in your
   pip install chardet
 ```
 
+Alternatively:
+```bash
+  pip install -r requirements.txt
+```
+
 ## TODO (order not representative)
 
 - Create a UI, probably just running from terminal for now
