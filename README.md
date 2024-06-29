@@ -33,3 +33,4 @@ If requirements.txt is not working correctly, run the following commands in your
 - Allow for auto updating of the data files
 - Allow for reading through multiple semesters of data
 - Allow for selecting which semesters of data you want to read through
+- Verify functionality of get_student_feedback

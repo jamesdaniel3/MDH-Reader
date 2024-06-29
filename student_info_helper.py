@@ -49,7 +49,7 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
     return student_visits_info
 
 
-def get_students_in_need(file_path):
+def get_students_in_need(file_paths):
     """
     This function will give information about all of a students who have had a TA answer one or both of the following:
         "an instructor should comment the student, comments below"
@@ -59,44 +59,46 @@ def get_students_in_need(file_path):
             it seems worth keeping as better safe than sorry, could probably be cleaned some
 
     params:
-        file_path: the path to the data file, should be interaction data
+        file_paths: the paths to the data files, should be interaction data
 
     return: a list of dictionaries containing the information about the students, see the info= {} section
     """
     flagged_student_instances = []
-    with (open(file_path, mode='r', encoding='utf-8') as file):
-        reader = csv.reader(file, delimiter=',', quotechar='"')
-        next(reader)
+    for file_path in file_paths:
+        encoding = detect_encoding(file_path)
+        with (open(file_path, mode='r', encoding=encoding) as file):
+            reader = csv.reader(file, delimiter=',', quotechar='"')
+            next(reader)
 
-        for row in reader:
-            ta_responses = json.loads(row[interaction_data.teacher_feedback])
-            if len(ta_responses) == 0:
-                continue
+            for row in reader:
+                ta_responses = json.loads(row[interaction_data.teacher_feedback])
+                if len(ta_responses) == 0:
+                    continue
 
-            if "3" in ta_responses[0]["answer"]["selections"] or 4 in ta_responses[0]["answer"]["selections"]:
-                ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
+                if "3" in ta_responses[0]["answer"]["selections"] or 4 in ta_responses[0]["answer"]["selections"]:
+                    ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
 
-                info = {
-                    "interaction_id": row[interaction_data.ticket_id],
-                    "ta_name": row[interaction_data.teacher_first_name] + " " + row[interaction_data.teacher_last_name],
-                    "student_name": row[interaction_data.student_first_name] + " " + row[interaction_data.student_last_name],
-                    "ta_comment": ta_written_feedback,
-                    "date": convert_datetime_string(row[interaction_data.started_at])[0],
-                }
+                    info = {
+                        "interaction_id": row[interaction_data.ticket_id],
+                        "ta_name": row[interaction_data.teacher_first_name] + " " + row[interaction_data.teacher_last_name],
+                        "student_name": row[interaction_data.student_first_name] + " " + row[interaction_data.student_last_name],
+                        "ta_comment": ta_written_feedback,
+                        "date": convert_datetime_string(row[interaction_data.started_at])[0],
+                    }
 
-                flagged_student_instances.append(info)
+                    flagged_student_instances.append(info)
 
     return flagged_student_instances
 
 
-def get_student_feedback(file_path, student_name="empty", student_email="empty"):
+def get_student_feedback(file_paths, student_name="empty", student_email="empty"):
     """
     This function give all the feedback a given student has received from TAs.
 
-    Note: this function is UNTESTED!
+    Note: this function is COMPLETELY UNTESTED!
 
     params:
-        file_path: the path to the data file, should be interaction data
+        file_paths: the paths to the data files, should be interaction data
         student_name: the student's first and last name, case-insensitive
         student_email: the student's email
 
@@ -104,20 +106,22 @@ def get_student_feedback(file_path, student_name="empty", student_email="empty")
     """
     student_feedback = {}
     student_first_name, student_last_name = student_name.lower().split()
-    with (open(file_path, mode='r', encoding='utf-8') as file):
-        reader = csv.reader(file, delimiter=',', quotechar='"')
-        next(reader)
+    for file_path in file_paths:
+        encoding = detect_encoding(file_paths)
+        with (open(file_path, mode='r', encoding=encoding) as file):
+            reader = csv.reader(file, delimiter=',', quotechar='"')
+            next(reader)
 
-        for row in reader:
-            current_ta_name = row[interaction_data.teacher_first_name].lower() + " " + row[interaction_data.teacher_last_name].lower()
-            if student_email == row[interaction_data.student_email] \
-                    or student_first_name == row[interaction_data.student_first_name].lower() \
-                    and student_last_name == row[interaction_data.student_last_name].lower():
-                ta_responses = json.loads(row[interaction_data.teacher_feedback])
+            for row in reader:
+                current_ta_name = row[interaction_data.teacher_first_name].lower() + " " + row[interaction_data.teacher_last_name].lower()
+                if student_email == row[interaction_data.student_email] \
+                        or student_first_name == row[interaction_data.student_first_name].lower() \
+                        and student_last_name == row[interaction_data.student_last_name].lower():
+                    ta_responses = json.loads(row[interaction_data.teacher_feedback])
 
-                if len(ta_responses) == 0:
-                    continue
-                if "3" in ta_responses[0]["answer"]["selections"] or 4 in ta_responses[0]["answer"]["selections"]:
-                    ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
-                    student_feedback[current_ta_name] = student_feedback.get(current_ta_name, []) + [ta_written_feedback]
+                    if len(ta_responses) == 0:
+                        continue
+                    if "3" in ta_responses[0]["answer"]["selections"] or 4 in ta_responses[0]["answer"]["selections"]:
+                        ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
+                        student_feedback[current_ta_name] = student_feedback.get(current_ta_name, []) + [ta_written_feedback]
     return student_feedback
