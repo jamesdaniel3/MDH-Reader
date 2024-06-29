@@ -1,25 +1,26 @@
-from constants import files, interactions_data_constants as interaction_data, shifts_data_constants as shift_data
+from constants import interactions_data_constants as interaction_data, shifts_data_constants as shift_data
+from sheets_helper import generate_instructor_feedback_sheet
 from utility_functions import get_student_written_feedback, convert_datetime_string
 import csv
 
 
-def get_instructor_feedback(file_path, ta_names, anonymous=True):
+def get_instructor_feedback(file_path, ta_names, named=False, google_sheet=False):
     """
     This function will get all written feedback that each TA in ta_names has received.
 
     params:
         file_path: the path to the data file, should be interaction data
         ta_name: a list of tas' first and last names, case-insensitive
-        anonymous: determines whether a students name is tied to their feedback
+        named: determines whether a student's name is tied to their feedback
 
-    if anonymous:
+    if not named:
         return
             {
                 <TA NAME>: [feedback1, feedback2, ...],
                 <TA NAME>: [feedback1, feedback2, ...],
                 ...
             }
-    if not anonymous:
+    if named:
         return
             {
                 <TA NAME>:
@@ -33,6 +34,10 @@ def get_instructor_feedback(file_path, ta_names, anonymous=True):
                 ...
             }
     """
+
+    if named and google_sheet:
+        print("Google sheets can only be generated for anonymous feedback")
+        quit(1)
 
     results = {}
 
@@ -43,16 +48,18 @@ def get_instructor_feedback(file_path, ta_names, anonymous=True):
     with open(file_path, mode='r', encoding='utf-8') as file:
         reader = csv.reader(file, delimiter=',', quotechar='"')
         next(reader)
-        
+
         for row in reader:
-            current_student_name = row[interaction_data.student_first_name] + " " + row[interaction_data.student_last_name]
-            current_ta_name = row[interaction_data.teacher_first_name].lower() + " " + row[interaction_data.teacher_last_name].lower()
+            current_student_name = row[interaction_data.student_first_name] + " " + row[
+                interaction_data.student_last_name]
+            current_ta_name = row[interaction_data.teacher_first_name].lower() + " " + row[
+                interaction_data.teacher_last_name].lower()
             if current_ta_name in ta_names:
                 if row[interaction_data.student_left_feedback] == "TRUE":
                     feedback = get_student_written_feedback(row)
                     if feedback == "" or feedback is None:
                         continue
-                    if anonymous:
+                    if not named:
                         results[current_ta_name] = results.get(current_ta_name, []) + [feedback]
                     else:
                         # I feel like there has to be a more efficient way of handling this conditional structure
@@ -64,7 +71,11 @@ def get_instructor_feedback(file_path, ta_names, anonymous=True):
                         else:
                             results[current_ta_name] = {current_student_name: [feedback]}
 
-    return results if anonymous else results
+    if google_sheet:
+        generate_instructor_feedback_sheet(results)
+        return
+
+    return results
 
 
 def get_ta_shifts(file_path, ta_name, limit=None):

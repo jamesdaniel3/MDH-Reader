@@ -2,7 +2,9 @@
 
 In this repo, I'm (finally) building a way for Intro CS Head TAs to parse through the office hours data that can be downloaded from my digital hand. Documentation will come as the project is built.
 
-If you are TA looking to use the script, reach out and I can point you to the data files that you need.
+If you are TA looking to use the script, reach out and I can point you to the data files that you need. Currently, the Google cloud console project tied to this project is in testing mode, 
+which means user emails are allowed manually. If you are unable to use the Google sheets functionality, reach out to me and I  can add you to our test users. I am trying to get the project 
+approved for "production" use.
 
 If you are TA looking to help with the codebase, see the notes directory, as well as any in-code documentation.
 

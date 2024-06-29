@@ -10,7 +10,7 @@ from googleapiclient.errors import HttpError
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 
-def generate_ta_feedback_sheet(info):
+def generate_instructor_feedback_sheet(info):
     """
     This function takes in the result of get_ta_feedback() with anonymous set to true and generates a Google
     sheet containing all the information. Each TA will have their own page containing their comments.
@@ -102,7 +102,10 @@ def generate_ta_feedback_sheet(info):
             'requests': requests
         }
         service.spreadsheets().batchUpdate(spreadsheetId=spreadsheet_id, body=body).execute()
-        print(f"Spreadsheet ID: {spreadsheet_id}")
+
+        # Print the link to the spreadsheet
+        spreadsheet_url = f"https://docs.google.com/spreadsheets/d/{spreadsheet_id}/edit"
+        print(f"Spreadsheet URL: {spreadsheet_url}")
 
     except HttpError as err:
         print(err)
