@@ -37,20 +37,24 @@ def main():
 
     if args.command == "get_student_oh_visits":
         result = get_student_oh_visits(INTERACTION_DATA, args.student_name, args.student_email)
-        print(result)
+        for each in result:
+            print(each)
 
     elif args.command == "get_students_in_need":
         result = get_students_in_need(INTERACTION_DATA)
-        print(result)
+        for each in result:
+            print(each)
 
     elif args.command == "get_student_feedback":
         result = get_student_feedback(INTERACTION_DATA, args.student_name, args.student_email)
-        print(result)
+        for each in result:
+            print(each)
 
     elif args.command == "get_instructor_feedback":
         result = get_instructor_feedback(INTERACTION_DATA, args.ta_names, args.named, args.google_sheet, args.excel_workbook)
         if not args.google_sheet and not args.excel_workbook:
-            print(result)
+            for each in result:
+                print(each)
 
     elif args.command == "get_ta_shifts":
         result = get_ta_shifts(SHIFT_DATA, args.ta_name, args.limit)
