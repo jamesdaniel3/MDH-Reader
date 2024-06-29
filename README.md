@@ -10,8 +10,9 @@ If you are TA looking to help with the codebase, see the notes directory, as wel
 
 - Given a list of TA names, get the feedback that they have received from students (get_instructor_feedback)
 - Given a student's name or email, get information about all of their trips to office hours (get_student_oh_visits)
-- Allow for getting all flagged students (get_students_in_need)
-- Allow for getting a given student's feedback (any TA notes about the student)
+- Get all flagged students (get_students_in_need)
+- Get a given student's feedback (get_student_feedback)
+- Get a list of a TA's shifts (get_ta_shifts)
 
 ## TODO (order not representative)
 
