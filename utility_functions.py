@@ -2,6 +2,7 @@ import json
 from constants import interactions_data_constants as data
 from datetime import datetime
 import pytz
+import chardet
 
 
 def get_student_written_feedback(row):
@@ -37,3 +38,9 @@ def cleaned_feedback(feedback):
     if cleaned in bad_feedback:
         return False
     return cleaned
+
+
+def detect_encoding(file_path):
+    with open(file_path, 'rb') as f:
+        result = chardet.detect(f.read())
+        return result['encoding']
