@@ -9,7 +9,7 @@ which means user emails are allowed manually. If you are unable to use the Googl
 approved for "production" use.
 
 If you are TA looking to help with the codebase, see the developer_notes directory, as well as any in-code documentation and reach out for files.
-[Description of Functions and their parameters](notes/functions.md)
+[Description of Functions and Their Parameters](notes/functions.md)
 
 ## CAPABILITIES
 
@@ -21,7 +21,7 @@ If you are TA looking to help with the codebase, see the developer_notes directo
 - Get a list of a TA's shifts (get_ta_shifts)
 - For all of the above actions, choose the number of semesters back for which you want data, defaults to using all data
 
-## INSTALLS
+## SETUP
 
 If requirements.txt is not working correctly, run the following commands in your working directory
 ```bash
@@ -36,8 +36,17 @@ Alternatively:
   pip install -r requirements.txt
 ```
 
-## TODO (order not representative)
+Additionally, you will need to do the following:
+- Get interaction data and shift data from MDH and put the files in teh mdh_files directory
+  - These files should follow the naming scheme <interaction/shift>_data_<f/s><last 2 digits of year>.csv
+    - ex. interaction_data_f23.csv
+- Make sure the file paths in files.py match up with the files you have
+- Get credentials.json from me and put it in root directory of project 
+- Get ta_roster.py from me and put it in constants directory
+- Confirm that your email has been added to the list of allowed emails 
+
+## Dev TODO (order not representative)
 
 - Allow for auto updating of the data files
-- give functions default return values
-- make the generate google sheet return the link to the sheet
+- Give functions more descriptive default return values
+- Make the generate google sheet function return the link to the sheet
