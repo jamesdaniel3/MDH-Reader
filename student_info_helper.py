@@ -34,7 +34,7 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
                     student_prompts_results = json.loads(row[interaction_data.student_prompts])
                     reason_for_request = "None" if len(student_prompts_results) < 2 else student_prompts_results[1]["answer"]
                     student_written_feedback = get_student_written_feedback(row, course) if get_student_written_feedback(row, course) else "None"
-                    ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
+                    ta_written_feedback = get_ta_written_feedback(row, course) if get_ta_written_feedback(row, course) else "None"
 
                     info = {
                         "interaction_id": row[interaction_data.ticket_id],
@@ -50,7 +50,7 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
     return student_visits_info
 
 
-def get_students_in_need(file_paths, semesters=None):
+def get_students_in_need(file_paths, semesters=None, course="UVA CS 1110"):
     flagged_student_instances = []
 
     if semesters is None:
@@ -72,7 +72,7 @@ def get_students_in_need(file_paths, semesters=None):
                     continue
 
                 if "3" in ta_responses[0]["answer"]["selections"] or 4 in ta_responses[0]["answer"]["selections"]:
-                    ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
+                    ta_written_feedback = get_ta_written_feedback(row, course) if get_ta_written_feedback(row, course) else "None"
 
                     info = {
                         "interaction_id": row[interaction_data.ticket_id],
@@ -87,7 +87,7 @@ def get_students_in_need(file_paths, semesters=None):
     return flagged_student_instances
 
 
-def get_student_feedback(file_paths, student_name="empty", student_email="empty", semesters=None):
+def get_student_feedback(file_paths, student_name="empty", student_email="empty", semesters=None, course="UVA CS 1110"):
     if student_name == "empty" and student_email == "empty":
         print("You must provide a student name or email")
         quit(1)
@@ -118,6 +118,6 @@ def get_student_feedback(file_paths, student_name="empty", student_email="empty"
                     if len(ta_responses) == 0:
                         continue
                     if "3" in ta_responses[0]["answer"]["selections"] or 4 in ta_responses[0]["answer"]["selections"]:
-                        ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
+                        ta_written_feedback = get_ta_written_feedback(row, course) if get_ta_written_feedback(row, course) else "None"
                         student_feedback[current_ta_name] = student_feedback.get(current_ta_name, []) + [ta_written_feedback]
     return student_feedback

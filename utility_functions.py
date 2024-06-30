@@ -7,7 +7,7 @@ import chardet
 
 
 def get_student_written_feedback(row, course):
-    prompts_of_interest = prompts.STUDENT_FEEDBACK_PROMPTS[course]
+    prompts_of_interest = prompts.STUDENT_WRITTEN_FEEDBACK_PROMPTS[course]
     try:
         student_responses = json.loads(row[data.student_feedback])
         for response in student_responses:
@@ -18,11 +18,12 @@ def get_student_written_feedback(row, course):
         return None
 
 
-def get_ta_written_feedback(row):
+def get_ta_written_feedback(row, course):
+    prompts_of_interest = prompts.TA_WRITTEN_FEEDBACK_PROMPTS[course]
     ta_feedback = json.loads(row[data.teacher_feedback])
     for response in ta_feedback:
         # this should just be done with the prompt field, it's safer
-        if response["question"]["type"] == "free-response":
+        if response["question"]["prompt"] in prompts_of_interest:
             return response["answer"]
 
 
