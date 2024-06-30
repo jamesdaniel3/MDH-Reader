@@ -46,6 +46,7 @@ Additionally, you will need to do the following:
 
 ## Dev TODO (order not representative)
 
+- Make getting ta and student feedback more universal/allow for inputting prompts?
 - Allow for auto updating of the data files
 - Give functions more descriptive default return values
 - Make the generate google sheet function return the link to the sheet
