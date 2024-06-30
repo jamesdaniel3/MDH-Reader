@@ -39,6 +39,5 @@ Alternatively:
 ## TODO (order not representative)
 
 - Allow for auto updating of the data files
-- prevent users from calling functions with no student name and no email 
 - give functions default return values
 - make the generate google sheet return the link to the sheet

@@ -5,9 +5,13 @@ import json
 
 
 def get_student_oh_visits(file_paths, student_name="empty", student_email="empty", semesters=None):
-    student_first_name, student_last_name = student_name.lower().split()
+    if student_name == "empty" and student_email == "empty":
+        print("You must provide a student name or email")
+        quit(1)
 
+    student_first_name, student_last_name = student_name.lower().split()
     student_visits_info = []
+
     if semesters is None:
         semesters = len(file_paths)
 
@@ -84,6 +88,10 @@ def get_students_in_need(file_paths, semesters=None):
 
 
 def get_student_feedback(file_paths, student_name="empty", student_email="empty", semesters=None):
+    if student_name == "empty" and student_email == "empty":
+        print("You must provide a student name or email")
+        quit(1)
+
     student_feedback = {}
     student_first_name, student_last_name = student_name.lower().split()
 
