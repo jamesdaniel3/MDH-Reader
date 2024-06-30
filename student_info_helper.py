@@ -1,4 +1,5 @@
 from constants import interactions_data_constants as interaction_data
+from constants import prompts
 from utility_functions import get_student_written_feedback, get_ta_written_feedback, convert_datetime_string, detect_encoding
 import csv
 import json
@@ -7,6 +8,10 @@ import json
 def get_student_oh_visits(file_paths, student_name="empty", student_email="empty", semesters=None, course="UVA CS 1110"):
     if student_name == "empty" and student_email == "empty":
         print("You must provide a student name or email")
+        quit(1)
+
+    if course not in prompts.STUDENT_WRITTEN_FEEDBACK_PROMPTS or course not in prompts.TA_WRITTEN_FEEDBACK_PROMPTS:
+        print("The course you provided does not have any prompts associated with it. Please be sure that the course information is in prompts.py")
         quit(1)
 
     student_first_name, student_last_name = student_name.lower().split()
@@ -51,6 +56,11 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
 
 
 def get_students_in_need(file_paths, semesters=None, course="UVA CS 1110"):
+    # this should be updated to handle more delicately
+    if course not in prompts.STUDENT_WRITTEN_FEEDBACK_PROMPTS or course not in prompts.TA_WRITTEN_FEEDBACK_PROMPTS:
+        print("The course you provided does not have any prompts associated with it. Please be sure that the course information is in prompts.py")
+        quit(1)
+
     flagged_student_instances = []
 
     if semesters is None:
@@ -88,6 +98,11 @@ def get_students_in_need(file_paths, semesters=None, course="UVA CS 1110"):
 
 
 def get_student_feedback(file_paths, student_name="empty", student_email="empty", semesters=None, course="UVA CS 1110"):
+    # this should be updated to handle more delicately
+    if course not in prompts.STUDENT_WRITTEN_FEEDBACK_PROMPTS or course not in prompts.TA_WRITTEN_FEEDBACK_PROMPTS:
+        print("The course you provided does not have any prompts associated with it. Please be sure that the course information is in prompts.py")
+        quit(1)
+
     if student_name == "empty" and student_email == "empty":
         print("You must provide a student name or email")
         quit(1)
