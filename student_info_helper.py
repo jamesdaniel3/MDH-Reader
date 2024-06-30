@@ -5,18 +5,6 @@ import json
 
 
 def get_student_oh_visits(file_paths, student_name="empty", student_email="empty", semesters=None):
-    """
-    This function will give information about all of a student's visits to office hours.
-
-    params:
-        file_paths:the list of paths to the data files, should be interaction data
-        student_name: the student's first and last name, case-insensitive
-        student_email: the student's email
-        semesters: the number of semesters back for which you want to collect data, uses all data by default
-
-    return: a list of dictionaries containing the information about the student's OH visits, see the info= {} section
-    """
-
     student_first_name, student_last_name = student_name.lower().split()
 
     student_visits_info = []
@@ -40,7 +28,7 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
                         and student_last_name == row[interaction_data.student_last_name].lower():
 
                     student_prompts_results = json.loads(row[interaction_data.student_prompts])
-                    reason_for_request = "Not given" if len(student_prompts_results) < 2 else student_prompts_results[1]["answer"]
+                    reason_for_request = "None" if len(student_prompts_results) < 2 else student_prompts_results[1]["answer"]
                     student_written_feedback = get_student_written_feedback(row) if get_student_written_feedback(row) else "None"
                     ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
 
@@ -59,20 +47,6 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
 
 
 def get_students_in_need(file_paths, semesters=None):
-    """
-    This function will give information about all of a students who have had a TA answer one or both of the following:
-        "an instructor should comment the student, comments below"
-        "other"
-
-    Note: there is a lot of junk data due to the fact that we are taking instances where the TA answered "other", but
-            it seems worth keeping as better safe than sorry, could probably be cleaned some
-
-    params:
-        file_paths: the list of paths to the data files, should be interaction data
-        semesters: the number of semesters back for which you want to collect data, uses all data by default
-
-    return: a list of dictionaries containing the information about the students, see the info= {} section
-    """
     flagged_student_instances = []
 
     if semesters is None:
@@ -110,19 +84,6 @@ def get_students_in_need(file_paths, semesters=None):
 
 
 def get_student_feedback(file_paths, student_name="empty", student_email="empty", semesters=None):
-    """
-    This function give all the feedback a given student has received from TAs.
-
-    Note: this function is COMPLETELY UNTESTED!
-
-    params:
-        file_paths: the list of paths to the data files, should be interaction data
-        student_name: the student's first and last name, case-insensitive
-        student_email: the student's email
-        semesters: the number of semesters back for which you want to collect data, uses all data by default
-
-    return: a dictionary where keys are TA names and values are lists of the feedback they have given
-    """
     student_feedback = {}
     student_first_name, student_last_name = student_name.lower().split()
 

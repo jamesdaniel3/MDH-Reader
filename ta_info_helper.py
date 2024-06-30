@@ -1,43 +1,12 @@
 from constants import interactions_data_constants as interaction_data, shifts_data_constants as shift_data
 from constants import ta_roster
 from sheets_helper import generate_instructor_feedback_sheet
-from execl_helper import generate_instructor_feedback_workbook
+from excel_helper import generate_instructor_feedback_workbook
 from utility_functions import get_student_written_feedback, convert_datetime_string, cleaned_feedback, detect_encoding
 import csv
 
 
 def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False, semesters=None):
-    """
-    This function will get all written feedback that each TA in ta_names has received.
-
-    params:
-        file_paths: the list of paths to the data files, should be interaction data
-        ta_name: a list of tas' first and last names, case-insensitive
-        named: determines whether a student's name is tied to their feedback
-        semesters: the number of semesters back for which you want to collect data, uses all data by default
-
-    if not named:
-        return
-            {
-                <TA NAME>: [feedback1, feedback2, ...],
-                <TA NAME>: [feedback1, feedback2, ...],
-                ...
-            }
-    if named:
-        return
-            {
-                <TA NAME>:
-                    <STUDENT NAME>: [feedback1, feedback2, ...],
-                    <STUDENT NAME>: [feedback1, feedback2, ...],
-                    ...
-                <TA NAME>:
-                    <STUDENT NAME>: [feedback1, feedback2, ...],
-                    <STUDENT NAME>: [feedback1, feedback2, ...],
-                    ...
-                ...
-            }
-    """
-
     if named and google_sheet:
         print("Google sheets can only be generated for anonymous feedback")
         quit(1)
@@ -101,18 +70,6 @@ def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet
 
 
 def get_ta_shifts(file_paths, ta_name, limit=None, semesters=None):
-    """
-    This function will return a list of a TA's shifts given their names
-
-    params:
-        file_paths: the list of paths to the data files, should be shift data
-        ta_name: the ta's first and last name, case-insensitive
-        limit: the number of shifts back you want to get info for
-        semesters: the number of semesters back for which you want to collect data, uses all data by default
-
-    return: a list of dictionaries containing the information about a TA's shift activity
-    """
-
     shifts = []
     ta_name = ta_name.lower()
     count = 0
