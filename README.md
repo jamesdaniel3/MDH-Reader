@@ -1,6 +1,6 @@
 # MDH-Reader
 
-In this repo, I'm (finally) building a way for TAs to parse through the office hours data that can be downloaded from My Digital Hand (MDH). 
+In this repo, I'm building a way for TAs to parse through the office hours data that can be downloaded from My Digital Hand (MDH). 
 
 A note for anyone using this repo. The functions are as good as the data they are provided, so note that you may need to retrieve the most recent data from MDH in order to get more accurate results. This code has been tested as far back as Spring 2023, but bugs could still be lurking. 
 
