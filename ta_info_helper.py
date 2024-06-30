@@ -1,24 +1,15 @@
 from constants import interactions_data_constants as interaction_data, shifts_data_constants as shift_data
-from constants import ta_roster, prompts
+from constants import ta_roster
 from sheets_helper import generate_instructor_feedback_sheet
 from excel_helper import generate_instructor_feedback_workbook
-from utility_functions import get_student_written_feedback, convert_datetime_string, cleaned_feedback, detect_encoding
+from utility_functions.general import get_student_written_feedback, convert_datetime_string, cleaned_feedback, detect_encoding
+from utility_functions.error_handling import check_course_prompts, check_data_export
 import csv
 
 
 def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False, semesters=None, course="UVA CS 1110"):
-    # this should be handled more carefully
-    if course not in prompts.STUDENT_WRITTEN_FEEDBACK_PROMPTS or course not in prompts.TA_WRITTEN_FEEDBACK_PROMPTS:
-        print("The course you provided does not have any prompts associated with it. Please be sure that the course information is in prompts.py")
-        quit(1)
-
-    if named and google_sheet:
-        print("Google sheets can only be generated for anonymous feedback")
-        quit(1)
-
-    if named and excel_workbook:
-        print("Excel workbooks can only be generated for anonymous feedback")
-        quit(1)
+    check_course_prompts(course, ta_responses_needed=False, student_responses_needed=True)
+    check_data_export(named, google_sheet, excel_workbook)
 
     if ta_names is None:
         ta_names = ta_roster.roster

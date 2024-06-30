@@ -1,18 +1,13 @@
 from constants import interactions_data_constants as interaction_data
-from constants import prompts
-from utility_functions import get_student_written_feedback, get_ta_written_feedback, convert_datetime_string, detect_encoding
+from utility_functions.general import get_student_written_feedback, get_ta_written_feedback, convert_datetime_string, detect_encoding
+from utility_functions.error_handling import check_course_prompts, check_student_params
 import csv
 import json
 
 
 def get_student_oh_visits(file_paths, student_name="empty", student_email="empty", semesters=None, course="UVA CS 1110"):
-    if student_name == "empty" and student_email == "empty":
-        print("You must provide a student name or email")
-        quit(1)
-
-    if course not in prompts.STUDENT_WRITTEN_FEEDBACK_PROMPTS or course not in prompts.TA_WRITTEN_FEEDBACK_PROMPTS:
-        print("The course you provided does not have any prompts associated with it. Please be sure that the course information is in prompts.py")
-        quit(1)
+    check_student_params(student_name, student_email)
+    check_course_prompts(course, ta_responses_needed=True, student_responses_needed=True)
 
     student_first_name, student_last_name = student_name.lower().split()
     student_visits_info = []
@@ -56,10 +51,7 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
 
 
 def get_students_in_need(file_paths, semesters=None, course="UVA CS 1110"):
-    # this should be updated to handle more delicately
-    if course not in prompts.STUDENT_WRITTEN_FEEDBACK_PROMPTS or course not in prompts.TA_WRITTEN_FEEDBACK_PROMPTS:
-        print("The course you provided does not have any prompts associated with it. Please be sure that the course information is in prompts.py")
-        quit(1)
+    check_course_prompts(course, ta_responses_needed=True, student_responses_needed=False)
 
     flagged_student_instances = []
 
@@ -98,14 +90,8 @@ def get_students_in_need(file_paths, semesters=None, course="UVA CS 1110"):
 
 
 def get_student_feedback(file_paths, student_name="empty", student_email="empty", semesters=None, course="UVA CS 1110"):
-    # this should be updated to handle more delicately
-    if course not in prompts.STUDENT_WRITTEN_FEEDBACK_PROMPTS or course not in prompts.TA_WRITTEN_FEEDBACK_PROMPTS:
-        print("The course you provided does not have any prompts associated with it. Please be sure that the course information is in prompts.py")
-        quit(1)
-
-    if student_name == "empty" and student_email == "empty":
-        print("You must provide a student name or email")
-        quit(1)
+    check_student_params(student_name, student_email)
+    check_course_prompts(course, ta_responses_needed=True, student_responses_needed=False)
 
     student_feedback = {}
     student_first_name, student_last_name = student_name.lower().split()

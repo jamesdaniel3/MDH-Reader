@@ -167,7 +167,7 @@ None
 
 ------------------------------------------------------------------------------------------------------------
 
-### [Utility Functions](../utility_functions.py)
+### [Utility Functions](../utility_functions/general.py)
 ```python
 def get_student_written_feedback(row):
 ```
