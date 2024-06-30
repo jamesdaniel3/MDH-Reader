@@ -4,7 +4,7 @@ import csv
 import json
 
 
-def get_student_oh_visits(file_paths, student_name="empty", student_email="empty", semesters=None):
+def get_student_oh_visits(file_paths, student_name="empty", student_email="empty", semesters=None, course="UVA CS 1110"):
     if student_name == "empty" and student_email == "empty":
         print("You must provide a student name or email")
         quit(1)
@@ -33,7 +33,7 @@ def get_student_oh_visits(file_paths, student_name="empty", student_email="empty
 
                     student_prompts_results = json.loads(row[interaction_data.student_prompts])
                     reason_for_request = "None" if len(student_prompts_results) < 2 else student_prompts_results[1]["answer"]
-                    student_written_feedback = get_student_written_feedback(row) if get_student_written_feedback(row) else "None"
+                    student_written_feedback = get_student_written_feedback(row, course) if get_student_written_feedback(row, course) else "None"
                     ta_written_feedback = get_ta_written_feedback(row) if get_ta_written_feedback(row) else "None"
 
                     info = {

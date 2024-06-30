@@ -6,7 +6,7 @@ from utility_functions import get_student_written_feedback, convert_datetime_str
 import csv
 
 
-def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False, semesters=None):
+def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False, semesters=None, course="UVA CS 1110"):
     if named and google_sheet:
         print("Google sheets can only be generated for anonymous feedback")
         quit(1)
@@ -41,7 +41,7 @@ def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet
                 current_ta_name = row[interaction_data.teacher_first_name].lower().strip() + " " + row[interaction_data.teacher_last_name].lower().strip()
                 if current_ta_name in ta_names:
                     if row[interaction_data.student_left_feedback] == "TRUE":
-                        feedback = get_student_written_feedback(row)
+                        feedback = get_student_written_feedback(row, course)
                         if feedback is None:
                             continue
                         if not cleaned_feedback(feedback):

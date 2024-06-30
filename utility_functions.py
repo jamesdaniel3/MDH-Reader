@@ -1,18 +1,17 @@
 import json
 from constants import interactions_data_constants as data
+from constants import prompts
 from datetime import datetime
 import pytz
 import chardet
 
 
-def get_student_written_feedback(row):
+def get_student_written_feedback(row, course):
+    prompts_of_interest = prompts.STUDENT_FEEDBACK_PROMPTS[course]
     try:
         student_responses = json.loads(row[data.student_feedback])
-        # this should just be done with the prompt field, it's safer
         for response in student_responses:
-            if response["question"]["type"] == "free-response":
-                return response["answer"]
-            if response["question"]["type"] == "short-answer":
+            if response["question"]["prompt"] in prompts_of_interest:
                 return response["answer"]
     except json.JSONDecodeError as e:
         print(f"JSONDecodeError: {e} - Skipping row")
