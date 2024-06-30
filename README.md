@@ -8,6 +8,8 @@ If you are TA looking to use the script, reach out and I can point you to the da
 If you are unable to use the Google sheets functionality, reach out to me and I  can add you to our test users. I am trying to get the project approved for "production" use.
 
 If you are TA looking to help with the codebase, see the developer_notes directory, as well as any in-code documentation and reach out for files.
+
+This should be useful for anyone curious about the script:
 [Description of Functions and Their Parameters](notes/functions.md)
 
 ## CAPABILITIES
@@ -36,12 +38,17 @@ Alternatively:
 ```
 
 Additionally, you will need to do the following:
-- Get interaction data and shift data from MDH and put the files in teh mdh_files directory
+- Get interaction data and shift data from MDH and put the files in the mdh_files directory
   - These files should follow the naming scheme <interaction/shift>_data_<f/s><last 2 digits of year>.csv
     - ex. interaction_data_f23.csv
+- Update the dictionaries in prompts.py with the prompts needed 
+  - These are the prompts you use when asking for the data that you want. In this case, it's expecting the prompt used for getting TA written feedback and the prompt used for getting student written feedback
+  - If either of the these does not apply, you don't have to update the dictionary, the code will throw warnings but it will work
 - Make sure the file paths in files.py match up with the files you have
 - Get credentials.json from me and put it in root directory of project 
-- Get ta_roster.py from me and put it in constants directory
+- Get ta_roster.py from me or make your own and put it in constants directory
+  - ta_roster.py should contain a list of strings representing all the TAs in your course 
+  - It is used as a default value so that if you want information for all of your TAs you don't have to list them all
 - Confirm that your email has been added to the list of allowed emails 
 
 ## Dev TODO (order not representative)

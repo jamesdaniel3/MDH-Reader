@@ -2,18 +2,14 @@ from constants import interactions_data_constants as interaction_data, shifts_da
 from constants import ta_roster
 from sheets_helper import generate_instructor_feedback_sheet
 from excel_helper import generate_instructor_feedback_workbook
-from utility_functions import get_student_written_feedback, convert_datetime_string, cleaned_feedback, detect_encoding
+from utility_functions.general import get_student_written_feedback, convert_datetime_string, cleaned_feedback, detect_encoding
+from utility_functions.error_handling import check_course_prompts, check_data_export
 import csv
 
 
-def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False, semesters=None):
-    if named and google_sheet:
-        print("Google sheets can only be generated for anonymous feedback")
-        quit(1)
-
-    if named and excel_workbook:
-        print("Excel workbooks can only be generated for anonymous feedback")
-        quit(1)
+def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False, semesters=None, course="UVA CS 1110"):
+    check_course_prompts(course, ta_responses_needed=False, student_responses_needed=True)
+    check_data_export(named, google_sheet, excel_workbook)
 
     if ta_names is None:
         ta_names = ta_roster.roster
@@ -41,7 +37,7 @@ def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet
                 current_ta_name = row[interaction_data.teacher_first_name].lower().strip() + " " + row[interaction_data.teacher_last_name].lower().strip()
                 if current_ta_name in ta_names:
                     if row[interaction_data.student_left_feedback] == "TRUE":
-                        feedback = get_student_written_feedback(row)
+                        feedback = get_student_written_feedback(row, course)
                         if feedback is None:
                             continue
                         if not cleaned_feedback(feedback):

@@ -17,7 +17,7 @@ Examples:
 
 ### [Student Information](../student_info_helper.py)
 ```python
-def get_student_oh_visits(file_paths, student_name="empty", student_email="empty", semesters=None):
+def get_student_oh_visits(file_paths, student_name="empty", student_email="empty", semesters=None, course="UVA CS 1110"):
 ```
 #### Intention
 This function gets information about all of a student's visits to office hours.
@@ -27,6 +27,7 @@ This function gets information about all of a student's visits to office hours.
 - `student_name`: the student's full name (first and last), case-insensitive
 - `student_email`: the student's email, case-sensitive
 - `semesters`: the number of semesters worth of information you want to consider, starting from the current semester, when `None`, all semesters will be used
+- `course`: the name of the course for which you are collecting information. Used to allow for users to differentiate between courses' prompts
 #### Return Value 
 A list of dictionaries. Each dictionary has the following structure:
 ```json
@@ -43,7 +44,7 @@ A list of dictionaries. Each dictionary has the following structure:
 ------------------------------------------------------------------------------------------------------------
 
 ```python
-def get_students_in_need(file_paths, semesters=None):
+def get_students_in_need(file_paths, semesters=None, course="UVA CS 1110"):
 ```
 #### Intention
 This function will give information about all of a students who have had a TA answer one or both of the following: 
@@ -52,6 +53,7 @@ This function will give information about all of a students who have had a TA an
 #### Params
 - `file_paths`: a list of the paths to all the files that contain data 
 - `semesters`: the number of semesters worth of information you want to consider, starting from the current semester, when `None`, all semesters will be used
+- `course`: the name of the course for which you are collecting information. Used to allow for users to differentiate between courses' prompts
 
 #### Return Value
 A list of dictionaries. Each dictionary has the following structure:
@@ -68,7 +70,7 @@ A list of dictionaries. Each dictionary has the following structure:
 ------------------------------------------------------------------------------------------------------------
 
 ```python
-def get_student_feedback(file_paths, student_name="empty", student_email="empty", semesters=None):
+def get_student_feedback(file_paths, student_name="empty", student_email="empty", semesters=None, course="UVA CS 1110"):
 ```
 #### Intention
 Get all the notes that instructors have left regarding the student. Aka if an instructor has left a note about a student after seeing them in OH it will be returned. 
@@ -78,6 +80,7 @@ Get all the notes that instructors have left regarding the student. Aka if an in
 - `student_name`: the student's full name (first and last), case-insensitive
 - `student_email`: the student's email, case-sensitive
 - `semesters`: the number of semesters worth of information you want to consider, starting from the current semester, when `None`, all semesters will be used
+- `course`: the name of the course for which you are collecting information. Used to allow for users to differentiate between courses' prompts
 
 #### Return Value
 A dictionary where keys are TA names and values are lists of the feedback they have given about the student
@@ -86,7 +89,7 @@ A dictionary where keys are TA names and values are lists of the feedback they h
 
 ### [Instructor Information](../ta_info_helper.py)
 ```python
-def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False, semesters=None):
+def get_instructor_feedback(file_paths, ta_names=None, named=False, google_sheet=False, excel_workbook=False, semesters=None, course="UVA CS 1110"):
 ```
 #### Intention
 Get all of the feedback that the desired instructors have received from students. This can be output to terminal or put in a Google sheet or Excel workbook. 
@@ -99,6 +102,7 @@ The feedback can be anonymous or named, but named feedback cannot be exported.
 - `google_sheet:` determines whether a google sheet is created
 - `excel_workbook` determines whether an excel sheet is created 
 - `semesters`: the number of semesters worth of information you want to consider, starting from the current semester, when `None`, all semesters will be used
+- `course`: the name of the course for which you are collecting information. Used to allow for users to differentiate between courses' prompts
 
 #### Return Value
 - If data exported: None
@@ -167,15 +171,16 @@ None
 
 ------------------------------------------------------------------------------------------------------------
 
-### [Utility Functions](../utility_functions.py)
+### [General Utility Functions](../utility_functions/general.py)
 ```python
-def get_student_written_feedback(row):
+def get_student_written_feedback(row, course):
 ```
 #### Intention
 Get any feedback a student has written from a given row
 
 #### Params
 - `row`: a row of information from the csv file
+- `course`: the name of the course for which you are collecting information. Used to allow for users to differentiate between courses' prompts
 
 #### Return Value
 - string containing feedback if feedback found 
@@ -185,12 +190,13 @@ Get any feedback a student has written from a given row
 ------------------------------------------------------------------------------------------------------------
 
 ```python
-def get_ta_written_feedback(row):
+def get_ta_written_feedback(row, course):
 ```
 #### Intention
 Get any feedback a ta has written from a given row
 #### Params
 - `row`: a row of information from the csv file
+- `course`: the name of the course for which you are collecting information. Used to allow for users to differentiate between courses' prompts
 #### Return Value 
 - string containing feedback if feedback found 
 - None if feedback not found 
