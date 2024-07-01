@@ -73,9 +73,8 @@ def get_students_in_need(file_paths, semesters=None, course="UVA CS 1110"):
                 if len(ta_responses) == 0:
                     continue
 
-                if "3" in ta_responses[0]["answer"]["selections"] or 4 in ta_responses[0]["answer"]["selections"]:
-                    ta_written_feedback = get_ta_written_feedback(row, course) if get_ta_written_feedback(row, course) else "None"
-
+                ta_written_feedback = get_ta_written_feedback(row, course)
+                if ta_written_feedback:
                     info = {
                         "interaction_id": row[interaction_data.ticket_id],
                         "ta_name": row[interaction_data.teacher_first_name] + " " + row[interaction_data.teacher_last_name],
@@ -118,7 +117,7 @@ def get_student_feedback(file_paths, student_name="empty", student_email="empty"
 
                     if len(ta_responses) == 0:
                         continue
-                    if "3" in ta_responses[0]["answer"]["selections"] or 4 in ta_responses[0]["answer"]["selections"]:
-                        ta_written_feedback = get_ta_written_feedback(row, course) if get_ta_written_feedback(row, course) else "None"
+                    ta_written_feedback = get_ta_written_feedback(row, course)
+                    if ta_written_feedback:
                         student_feedback[current_ta_name] = student_feedback.get(current_ta_name, []) + [ta_written_feedback]
     return student_feedback

@@ -62,7 +62,7 @@ A list of dictionaries. Each dictionary has the following structure:
   'interaction_id': '99999', 
   'ta_name': 'Jane Doe', 
   'student_name': 'Jane Doe', 
-  'ta_comment': "comment",  ("None" if not found) 
+  'ta_comment': "comment",
   'date': 'YYYY-MM-DD'
 }
 ```
