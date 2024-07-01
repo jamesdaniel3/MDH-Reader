@@ -7,7 +7,7 @@ A note for anyone using this repo. The functions are as good as the data they ar
 If you are TA looking to use the script, reach out and I can point you to the data files that you need, as well as the Google console credentials and the roster file. Currently, the Google cloud console project tied to this project is in testing mode, which means user emails are allowed manually. 
 If you are unable to use the Google sheets functionality, reach out to me and I  can add you to our test users. I am trying to get the project approved for "production" use.
 
-If you are TA looking to help with the codebase, see the developer_notes directory, as well as any in-code documentation and reach out for files.
+If you are looking to help with the codebase, see the developer_notes directory, as well as any in-code documentation and reach out for files. Feel free to submit a PR if you want to help change something!
 
 This should be useful for anyone curious about the script:
 [Description of Functions and Their Parameters](notes/functions.md)
@@ -53,7 +53,6 @@ Additionally, you will need to do the following:
 
 ## Dev TODO (order not representative)
 
-- Make getting ta and student feedback more universal/allow for inputting prompts?
 - Allow for auto updating of the data files
 - Give functions more descriptive default return values
 - Make the generate google sheet function return the link to the sheet
